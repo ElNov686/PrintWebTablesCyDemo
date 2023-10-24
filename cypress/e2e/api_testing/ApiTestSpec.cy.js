@@ -80,37 +80,46 @@ describe('API with Cypress', () => {
             })
 
         it('verify response has headers', () => {
-                         getResponse()
-                         .then(response => {
-                                console.log(response)
-                                expect(response).to.have.property('headers')
-                         })
+                 getResponse()
+                     .then(response => {
+                     console.log(response)
+                     expect(response).to.have.property('headers')
+                 })
         })
 
         it('print response', () => {
                 getResponse()
-                .then(response => {
+                  .then(response => {
                     console.log(response.body)
-//                    expect(response).to.have.any.keys('bookingid')
-//                    CREATED_ID = response.bookingid
-//                    console.log("CREATED_ID = ", CREATED_ID)
+                    console.log("CREATED_ID = ", CREATED_ID)
                 })
         })
 
         it('verify the status of the booking creation', () => {
             getResponse()
-                .then(response => {
-                expect(response).to.have.property('status', 200)
-                CREATED_ID = response.body.bookingid
+                .then(({status}) => {
+                expect(status).to.be.eq(200)
+                cy.log(status)
+
             })
         })
 
-        it.only('verify the lastname in the created booking', () => {
-                    getResponse()
-                        .then(response => {
-                        expect(response.body.lastname).to.be.equal('Brown')
-                    })
+        it('verify the lastname in the created booking', () => {
+             getResponse()
+                .then(response => {
+                expect(response.body.booking.lastname).to.be.equal('Brown')
+                })
+        })
+
+        it('verify the totalprice', () => {
+            getResponse()
+                .then(response => {
+                expect(response.body.booking).to.have.property('totalprice', 111)
+                console.log(response.body.booking.totalprice)
+                })
         })
     })
+
+
 })
 
